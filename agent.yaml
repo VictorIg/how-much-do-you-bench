@@ -24,21 +24,21 @@
 # all, is in docs/harnesses.md.
 
 agents:
-  # V3: lean baseline. benchmark-core for the workflow, docs-on-demand +
-  # Context7 as an escape hatch for a genuine external-API unknown. No
-  # context-scout by default -- these workspaces are small and named by the
-  # task instruction, so a scout call would cost a full Gemma turn (one tool
-  # call per turn) without saving one. Re-attach context-scout below if the
-  # hidden tasks turn out to have much larger workspaces.
+  # V4: five failure-mode-targeted skills instead of generic ones, based on
+  # traces showing Gemma stops after plausible-looking code without proving
+  # the requested behavior, under-reads local docs, and blows up context on
+  # wide survey CSVs. Each skill's description carries the trigger and the
+  # core behavioral fix, since that's visible to Gemma before the body loads.
   - name: opencode
     # The `gateway` provider is defined under kwargs below. opencode's adapter
     # refuses a model_name with no provider prefix.
     model_name: gateway/gemma
     skills:
-      - ./skills/benchmark-core
+      - ./skills/verify-result
       - ./skills/survey-analysis
-      - ./skills/docs-on-demand
-      # - ./skills/context-scout
+      - ./skills/data-reconciliation
+      - ./skills/external-api
+      - ./skills/artifact-analysis
     mcp_servers:
       - name: context7
         transport: streamable-http

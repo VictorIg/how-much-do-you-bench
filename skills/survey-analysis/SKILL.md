@@ -1,49 +1,60 @@
 ---
 name: survey-analysis
-description: Use for survey exports, questionnaire/codebook data, respondent segmentation, multi-select questions, survey normalization, and survey reporting.
+description: MUST use for survey, questionnaire, codebook, respondent, quant*.csv, challenges, initiatives, segmentation, or survey-normalization tasks. Read the local survey docs completely before coding; never head/cat a wide survey CSV; apply documented respondent-quality and methodology rules before aggregation.
 ---
 
-# Survey analysis
+# Survey workflow
 
-For survey tasks, local documentation is authoritative.
+Local survey documentation is authoritative.
 
-Before implementing:
+Before implementation:
 
-1. Inspect the task instruction.
-2. Inspect the docs directory or codebook.
-3. Identify:
-   - header structure;
-   - respondent inclusion/exclusion rules;
-   - data-quality exclusions;
-   - single-select versus multi-select encoding;
-   - weighting rules;
-   - treatment of missing values;
-   - exact question codes needed by the task.
-4. Inspect representative raw rows before coding.
+1. List docs/.
+2. Read docs/README.md first when present.
+3. Identify all documents governing:
+   - export/header structure
+   - question encoding
+   - respondent inclusion/exclusion
+   - data-quality exclusions
+   - weighting
+   - missing values
+4. If the docs directory is small, read all relevant rule documents before coding.
 
-Do not assume the first CSV row is the only header.
+Do not infer survey methodology from column names.
+
+## Inspecting wide exports
+
+Never use:
+- head quant*.csv
+- tail quant*.csv
+- cat quant*.csv
+- cut -d',' on CSV
+
+CSV fields may be quoted and survey rows can be extremely wide.
+
+Use Python's csv module, Polars, or pandas to inspect only:
+- number of columns;
+- question-code/header rows;
+- columns matching the needed question;
+- a few selected fields from 2-3 respondents.
+
+## Analysis
+
+Apply globally documented respondent exclusions before aggregation.
 
 For multi-select questions:
-- determine the option columns from the codebook/question metadata;
-- exclude free-text OTHER/_TEXT fields unless explicitly requested;
-- preserve the documented option labels;
-- count respondents, not non-empty cells blindly.
-
-Apply respondent-quality filters before aggregation when documentation
-says they apply globally.
-
-Do not apply survey weights unless the requested metric explicitly requires
-weighted results.
+- identify option columns from metadata/codebook;
+- do not treat free-text OTHER fields as ordinary options unless requested;
+- count respondents, not raw non-empty cells blindly.
 
 For segmentation:
-- establish the denominator/group population explicitly;
-- apply respondent exclusions before grouping;
-- verify totals and a few groups manually.
+- verify the segment definition from local docs/code;
+- apply exclusions before grouping;
+- confirm denominators.
 
-Before finishing:
-- calculate at least one small result independently;
-- check row/respondent counts after each filtering stage;
-- verify the output shape and ordering against the requested contract.
+Do not use Context7 for survey semantics.
 
-Do not use external documentation for survey semantics.
-The local codebook/methodology/data-quality documents override model knowledge.
+## Verify
+
+Report intermediate respondent counts after filters.
+Manually cross-check at least one group/category using an independent calculation.
