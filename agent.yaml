@@ -36,6 +36,7 @@ agents:
     model_name: gateway/gemma
     skills:
       - ./skills/benchmark-core
+      - ./skills/survey-analysis
       - ./skills/docs-on-demand
       # - ./skills/context-scout
     mcp_servers:

@@ -12,7 +12,14 @@ Before using Context7:
 2. Prefer installed CLI help, existing project examples, schemas, and local configuration.
 3. Identify one concrete API uncertainty.
 
-Use Context7 only for that uncertainty.
+Use Context7 only when:
+- the failure depends on an external library API;
+- local code, help output, and examples did not establish the answer;
+- you can formulate one specific API question.
+
+Do not use Context7 for SQL semantics, business rules, survey interpretation,
+shell commands, debugging logic, or repository navigation. Local evidence
+answers those.
 
 When querying:
 - Ask about exactly one concept.

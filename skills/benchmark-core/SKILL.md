@@ -1,68 +1,24 @@
 ---
 name: benchmark-core
-description: Use for engineering benchmark tasks. Solve from local evidence, make minimal changes, and verify by execution.
+description: Use for benchmark engineering tasks requiring a verified change.
 ---
 
-# Benchmark workflow
+# Solve efficiently
 
-Produce a verified working result.
+1. Read the task and named files first.
+2. Convert every requirement into a concrete, checkable invariant --- not
+   just the one you already have evidence for.
+3. Run/reproduce the current behavior early.
+4. Inspect actual data/output rather than guessing.
+5. Make the smallest relevant change.
+6. Run the real workflow/check afterward.
+7. If no test exists, create a focused check from the requirements.
+8. Check off every invariant from step 2 individually. A fix that resolves
+   the symptom you noticed can still leave another one unverified.
+9. For incremental or destructive work, check idempotence.
+10. Use exact failure output as evidence for the next attempt.
+11. Do not repeatedly explore after enough evidence exists to act.
 
-## 1. Establish the contract
-
-Identify:
-- required end state;
-- files/interfaces that must remain unchanged;
-- observable invariants;
-- cheapest executable verification.
-
-## 2. Inspect local evidence first
-
-Prefer, in order:
-1. task instruction;
-2. named implementation files;
-3. local docs/codebooks;
-4. actual input data/schema;
-5. existing project examples/configuration;
-6. external documentation only if an API remains uncertain.
-
-Do not broadly read the repository without a reason.
-
-## 3. Reproduce
-
-Run the supplied command/script/test when practical.
-
-For data tasks, inspect actual outputs rather than reasoning only from code.
-
-## 4. Diagnose
-
-Form one concrete hypothesis from observed evidence.
-
-Pay particular attention to:
-- data grain and uniqueness;
-- NULL behavior;
-- join multiplicity;
-- boundary conditions;
-- repeated-run/idempotence behavior;
-- exact output/interface requirements.
-
-## 5. Change
-
-Make the smallest relevant modification.
-Preserve existing interfaces and unrelated behavior.
-
-## 6. Verify
-
-Run the real workflow after editing.
-
-If no visible tests exist, construct focused checks directly from
-the requirements.
-
-For stateful/incremental/destructive operations, test repeated execution
-when relevant.
-
-Never claim completion from code inspection alone.
-
-## 7. Recover
-
-If verification fails, use the exact result as new evidence.
-Do not repeat an unchanged failed approach.
+Prefer local docs over external docs.
+Use external documentation only for one concrete API uncertainty.
+Do not finish without executable verification of every invariant.
