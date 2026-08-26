@@ -24,12 +24,24 @@
 # all, is in docs/harnesses.md.
 
 agents:
+  # V3: lean baseline. benchmark-core for the workflow, docs-on-demand +
+  # Context7 as an escape hatch for a genuine external-API unknown. No
+  # context-scout by default -- these workspaces are small and named by the
+  # task instruction, so a scout call would cost a full Gemma turn (one tool
+  # call per turn) without saving one. Re-attach context-scout below if the
+  # hidden tasks turn out to have much larger workspaces.
   - name: opencode
     # The `gateway` provider is defined under kwargs below. opencode's adapter
     # refuses a model_name with no provider prefix.
     model_name: gateway/gemma
-    skills: []
-    mcp_servers: []
+    skills:
+      - ./skills/benchmark-core
+      - ./skills/docs-on-demand
+      # - ./skills/context-scout
+    mcp_servers:
+      - name: context7
+        transport: streamable-http
+        url: https://mcp.context7.com/mcp
     kwargs:
       opencode_config:
         # Your system prompt. `build` is the agent `opencode run` uses, and
